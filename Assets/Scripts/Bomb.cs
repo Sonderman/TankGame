@@ -6,18 +6,26 @@ public class Bomb : MonoBehaviour
     public GameObject explosionPrefab;
     public float radius = 7f;
     public float explosionForce = 500f;
+    public AudioSource audioSource { get { return GetComponent<AudioSource>(); } }
     void Start()
     {
         Destroy(gameObject, 2f);
     }
     private void OnCollisionEnter(Collision collision)
     {
+        
+        
         Health health = collision.gameObject.GetComponent<Health>();
         if (health)
         {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(audioSource.clip);
+            }
             health.TakeDamage(10);
+            CreateExplosionEffect();
         }
-        CreateExplosionEffect();
+        
     }
 
     private void CreateExplosionEffect()
